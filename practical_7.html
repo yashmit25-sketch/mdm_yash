@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College FAQ</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-6">
+
+    <div class="max-w-2xl mx-auto bg-white p-5 rounded-lg">
+
+        <h1 class="text-2xl font-bold text-center mb-5">
+            College FAQ Portal
+        </h1>
+
+        <div class="faq">
+            <div class="q flex justify-between p-3 bg-blue-500 text-white cursor-pointer mb-1 rounded">
+                <span>What are college timings?</span>
+                <button>▼</button>
+            </div>
+            <p class="a hidden p-3 bg-gray-100">
+                College timings are 9 AM to 4 PM.
+            </p>
+        </div>
+
+        <div class="faq">
+            <div class="q flex justify-between p-3 bg-blue-500 text-white cursor-pointer mb-1 rounded">
+                <span>How can I contact the department?</span>
+                <button>▼</button>
+            </div>
+            <p class="a hidden p-3 bg-gray-100">
+                Contact the department office during working hours.
+            </p>
+        </div>
+
+        <div class="faq">
+            <div class="q flex justify-between p-3 bg-blue-500 text-white cursor-pointer mb-1 rounded">
+                <span>How can I pay college fees?</span>
+                <button>▼</button>
+            </div>
+            <p class="a hidden p-3 bg-gray-100">
+                Fees can be paid through the student portal.
+            </p>
+        </div>
+
+        <div class="faq">
+            <div class="q flex justify-between p-3 bg-blue-500 text-white cursor-pointer mb-1 rounded">
+                <span>How do I get my ID card?</span>
+                <button>▼</button>
+            </div>
+            <p class="a hidden p-3 bg-gray-100">
+                Collect your ID card from the college office.
+            </p>
+        </div>
+
+        <div class="faq">
+            <div class="q flex justify-between p-3 bg-blue-500 text-white cursor-pointer mb-1 rounded">
+                <span>Where is the college library?</span>
+                <button>▼</button>
+            </div>
+            <p class="a hidden p-3 bg-gray-100">
+                The library is located in the main college building.
+            </p>
+        </div>
+
+        <div class="faq">
+            <div class="q flex justify-between p-3 bg-blue-500 text-white cursor-pointer mb-1 rounded">
+                <span>How can I apply for leave?</span>
+                <button>▼</button>
+            </div>
+            <p class="a hidden p-3 bg-gray-100">
+                You can apply for leave through the student portal.
+            </p>
+        </div>
+
+        <div class="faq">
+            <div class="q flex justify-between p-3 bg-blue-500 text-white cursor-pointer mb-1 rounded">
+                <span>How can I check my exam schedule?</span>
+                <button>▼</button>
+            </div>
+            <p class="a hidden p-3 bg-gray-100">
+                The exam schedule is available on the college website and notice board.
+            </p>
+        </div>
+
+        <div class="faq">
+            <div class="q flex justify-between p-3 bg-blue-500 text-white cursor-pointer mb-1 rounded">
+                <span>Where can I get study materials?</span>
+                <button>▼</button>
+            </div>
+            <p class="a hidden p-3 bg-gray-100">
+                Study materials can be obtained from the library or student portal.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        let questions = document.querySelectorAll(".q");
+
+        questions.forEach(q => {
+            q.addEventListener("click", () => {
+                q.nextElementSibling.classList.toggle("hidden");
+            });
+        });
+    </script>
+
+</body>
+</html>
