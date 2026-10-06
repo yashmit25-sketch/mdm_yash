@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal To-Do List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 bg-fixed flex items-center justify-center p-4">
+
+    <main class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl">
+
+        <h1 class="text-3xl font-bold text-center text-slate-700">My To-Do List</h1>
+        <p class="text-center text-slate-500 mb-5">Academic and personal tasks, one place</p>
+
+        <!-- Input row -->
+        <div class="flex gap-2">
+            <input type="text" id="taskInput" aria-label="Task name" placeholder="Enter your task" maxlength="80"
+                class="flex-1 min-w-0 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition">
+            <select id="categoryInput" aria-label="Category"
+                class="border border-gray-300 rounded-lg px-2 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                <option value="Academic">Academic</option>
+                <option value="Personal">Personal</option>
+            </select>
+            <button id="addBtn"
+                class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition">
+                Add
+            </button>
+        </div>
+        <p id="errorMsg" class="text-red-500 text-sm mt-1 h-5"></p>
+
+        <!-- Counter -->
+        <div class="flex justify-end mt-2 mb-3">
+            <span id="counter" class="text-sm text-slate-500"></span>
+        </div>
+
+        <!-- Task list -->
+        <ul id="taskList" class="space-y-2"></ul>
+
+        <p id="emptyMessage" class="text-center text-gray-400 mt-4"></p>
+
+        <button id="clearBtn" class="hidden mx-auto mt-4 text-sm text-red-500 hover:underline">
+            Clear completed tasks
+        </button>
+    </main>
+
+    <script>
+        const input = document.getElementById("taskInput");
+        const categoryInput = document.getElementById("categoryInput");
+        const errorMsg = document.getElementById("errorMsg");
+        const taskList = document.getElementById("taskList");
+        const emptyMessage = document.getElementById("emptyMessage");
+        const counter = document.getElementById("counter");
+        const clearBtn = document.getElementById("clearBtn");
+
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+        function saveTasks() {
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function addTask() {
+            const text = input.value.trim();
+            if (text === "") {
+                errorMsg.textContent = "Task name can't be empty.";
+                return;
+            }
+            errorMsg.textContent = "";
+            tasks.push({ id: Date.now(), text: text, category: categoryInput.value, done: false });
+            input.value = "";
+            saveTasks();
+            render();
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            task.done = !task.done;
+            saveTasks();
+            render();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            render();
+        }
+
+        function render() {
+            taskList.innerHTML = "";
+
+            tasks.forEach(task => {
+                const li = document.createElement("li");
+                li.className = "flex items-center gap-3 bg-gray-50 p-3 rounded-lg border";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = task.done;
+                checkbox.setAttribute("aria-label", "Mark task as completed");
+                checkbox.className = "h-4 w-4 accent-indigo-600 cursor-pointer";
+                checkbox.onchange = () => toggleTask(task.id);
+
+                const span = document.createElement("span");
+                span.textContent = task.text;
+                span.className = "flex-1 break-words " + (task.done ? "line-through text-gray-400" : "text-slate-700");
+
+                const tag = document.createElement("span");
+                tag.textContent = task.category;
+                tag.className = "text-xs px-2 py-0.5 rounded-full " +
+                    (task.category === "Academic" ? "bg-indigo-100 text-indigo-700" : "bg-emerald-100 text-emerald-700");
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "Delete";
+                deleteBtn.className = "bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600 transition";
+                deleteBtn.onclick = () => deleteTask(task.id);
+
+                li.append(checkbox, span, tag, deleteBtn);
+                taskList.appendChild(li);
+            });
+
+            // Empty message
+            if (tasks.length === 0) {
+                emptyMessage.textContent = "No tasks yet. Add your first task above.";
+                emptyMessage.classList.remove("hidden");
+            } else {
+                emptyMessage.classList.add("hidden");
+            }
+
+            // Counter + clear button
+            const doneCount = tasks.filter(t => t.done).length;
+            counter.textContent = doneCount + " of " + tasks.length + " done";
+            clearBtn.classList.toggle("hidden", doneCount === 0);
+        }
+
+        // Events
+        document.getElementById("addBtn").addEventListener("click", addTask);
+        input.addEventListener("keydown", e => { if (e.key === "Enter") addTask(); });
+
+        clearBtn.addEventListener("click", () => {
+            tasks = tasks.filter(t => !t.done);
+            saveTasks();
+            render();
+        });
+
+        render();
+    </script>
+
+</body>
+
+</html>
